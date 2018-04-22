@@ -1,0 +1,205 @@
+html {
+    background: url('../images/cinema-background.jpg') no-repeat black;
+    background-size: cover;
+    height: 100%;
+}
+
+body {
+    line-height: 1.7;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+a {
+    -webkit-transition: all ease .3s;
+    -moz-transition: all ease .3s;
+    -ms-transition: all ease .3s;
+    -o-transition: all ease .3s;
+    transition: all ease .3s;
+}
+
+.float-right {
+    float: right !important;
+}
+
+.float-left {
+    float: left !important;
+}
+
+.d-inline-block {
+    display: inline-block !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.mt-3 {
+    margin-top: 3px !important;
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
+}
+
+.w-50 {
+    width: 50px !important;
+}
+
+.w-100 {
+    width: 100% !important;
+}
+
+.w-200 {
+    width: 200px !important;
+}
+
+.h-60 {
+    height: 60px !important;
+}
+
+.h-150 {
+    height: 150px !important;
+}
+
+.h-250 {
+    height: 250px !important;
+}
+
+.border-red {
+    border: 2px solid #7d040b;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.bg-transperant {
+    background-color: transparent
+}
+
+.background-transparent {
+    background: rgba(0, 0, 0, 0.1)
+}
+
+.page-title {
+    background-color: #ce3b22 !important;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.btn-red {
+    color: #fff !important;
+    background-color: #ce3b22;
+    border-color: #7d040b;
+}
+
+.btn-red:hover {
+    background-color: #ce3b22;
+    border-color: #7d040b;
+    color: #fff;
+}
+
+#main-wrapper {
+    height: 100%;
+}
+
+#sammy-app,
+.background-transparent.active,
+#main-wrapper {
+    background-color: #f4f7f9;
+    padding: 0;
+}
+
+.display-none {
+    display: none;
+}
+
+.navbar {
+    padding-bottom: 0;
+}
+
+
+/* css for search input and button */
+
+.add-on .input-group-btn>.btn {
+    border: none;
+}
+
+#menu-user-logout {
+    display: none;
+}
+
+
+/* Register and Login*/
+
+.main-center {
+    color: #fff;
+    width: 50%;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background: url('../images/slider/movie.jpg') no-repeat black;
+}
+
+
+/* Login */
+
+.main-login {
+    background-size: cover;
+}
+
+
+/* Contact */
+
+textarea.form-control {
+    height: 150px;
+}
+
+.submit {
+    font-size: 1.1em;
+    float: right;
+}
+
+#categories-filter h3 {
+    color: #7d040b;
+}
+
+#search-bar {
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+#search-btn {
+    line-height: 1.4;
+    background: #ce3b22;
+}
+
+.page-item {
+    display: inherit;
+    border: 2px solid #7d040b;
+    border-radius: 4px;
+}
+
+.page-link {
+    color: #ce3b22;
+    background: transparent;
+}
+
+.page-link:hover {
+    color: #7d040b;
+}
+
+.pagination {
+    margin: 30px 15px;
+}
+
+#mobile-nav-trigger {
+    float: right;
+    top: 50px;
+    position: relative;
+}
+
+#map {
+    height: 520px;
+    width: 100%;
+}

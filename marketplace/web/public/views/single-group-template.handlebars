@@ -1,0 +1,37 @@
+<h1 class="page-title">{{movie.title}}</h1>
+<div class="container" id="single-movie-page">
+    <div class="single-movie-wrapper">
+        <div class="row text-primary">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5" id="single-movie-cover">
+                <img src="{{movie.imgUrl}}" alt="movie cover">
+            </div>
+            <div class="col-xs-12 col-lg-7 text-primary" id="single-movie-info">
+                <p>
+                    <span><b>Current Price: </b>{{movie.price}}$</span>
+                    <span id="moviePrice"><b>Total Price: </b>{{totalPrice}}$</span>
+                    <span><b>Remaining price: </b>{{remainingPrice}}$</span>
+                    <span id="movieQuantity"><b>Order quantity: </b>{{quantity}}</span>
+                    <span><b>Finished: </b>{{finished}}</span>
+                </p>
+
+                {{#unless finished}}
+                <div class="row">
+                    <form class="form-horizontal" method="post" action="/#group-buy">
+                        <div class="col-xs-8">
+                            <input class="form-control" name="group_id" id="token-value" type="hidden" value="{{id}}">
+                            <input required class="form-control" name="tokens" id="token-value" placeholder="Enter token count" type="number">
+                        </div>
+
+                        <div class="col-xs-4">
+                            <button  type="submit" class="btn btn-red w-100">
+                                <i class="fa fa-chevron-right fa-fw btn-red"></i>
+                                Send
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {{/unless}}
+            </div>
+        </div>
+    </div>
+</div>

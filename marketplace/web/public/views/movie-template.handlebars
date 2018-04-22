@@ -1,0 +1,67 @@
+<div class="container">
+    <div class="row">
+        <h1 id="header-movies" class="page-title">Movies in our store</h1>
+    </div>
+
+    <div id="search-bar" class="col-md-12 col-lg-8 offset-lg-2">
+        <div class="input-group add-on">
+            <input class="form-control" id="search-value" placeholder="Search movies" type="text">
+            <div class="input-group-btn">
+                <button class="btn btn-success" id="search-btn" type="submit">
+                    <i id="search-btn-icon" class="fa fa-search fa-fw"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{#if movies.movie}}
+        <div id="movies-list-gallery" class="col-xs-12">
+            <div class="row text-primary">
+                {{#each movies.movie}}
+                    <div class="movie col-xs-12 col-sm-6 col-md-4  col-lg-4 text-primary" id="{{id}}">
+                        <div class="movie-wrapper">
+                            <a href="#movies/{{id}}">
+                                <h5 class="title text-center">{{title}}</h5>
+                                <div class="wrapper-movie-img">
+                                    <div class="price">${{price}}</div>
+                                    <img class="movie-cover" src="{{imgUrl}}" alt="movie-cover">
+                                </div>
+                            </a>
+                            <button class="btn btn-red" id="add-to-cart-btn" type="submit" movie-target="{{id}}">Add to cart</button>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+            <div class="row text-center">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#movies/page/1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    {{#if movies.hasQuery}}
+                        {{#each movies.size}}
+                            <li class="page-item"><a href="#search/{{this}}&{{inc @index}}" class="page-link" >{{inc @index}}</a></li>
+                        {{/each}}
+                    {{else}}
+                        {{#each movies.size}}
+                            <li class="page-item"><a href="#movies/page/{{inc @index}}" class="page-link" >{{inc @index}}</a></li>
+                        {{/each}}
+                    {{/if}}
+                    <li class="page-item">
+                    <a class="page-link" href="#movies/page/{{movies.count}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {{else}}
+    <div class="no-movies text-center">
+        <h2 style="padding-top: 70px;">No movies in this search</h2>
+        <img class="movie-cover" src="images/unhappy.png" alt="unhappy icon">
+    </div>
+    {{/if}}
+</div>

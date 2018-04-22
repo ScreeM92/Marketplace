@@ -1,0 +1,105 @@
+/* homepage */
+
+#homepage-carousel .carousel-inner {
+    max-height: 400px;
+}
+
+#homepage-carousel .carousel-item {
+    max-height: 400px;
+}
+
+#movie-caption-image {
+    left: 10%;
+    right: auto;
+    top: 4%;
+}
+
+#movie-caption-image img {
+    /*height: 330px;*/
+    height: 104%;
+    animation-delay: 2s;
+}
+
+#movie-caption-text {
+    right: 5%;
+    left: auto;
+    padding-bottom: 30px;
+    top: 5%;
+    max-width: 47.2%;
+}
+
+#movie-caption-text h2 {
+    font-family: 'Love Ya Like A Sister', cursive;
+    animation-delay: 3s;
+    text-align: left;
+}
+
+#movie-caption-text p {
+    animation-delay: 4s;
+    text-align: left;
+}
+
+#movie-view-btn {
+    right: 45%;
+    left: auto;
+    animation-delay: 5s;
+}
+
+.btn-transparent {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.btn-transparent:hover {
+    color: #fff;
+}
+
+.section-icon-blue {
+    display: block;
+    width: 6.375em;
+    height: 6.375em;
+    margin: 0 auto;
+    line-height: 6.375em;
+    background-color: #1eaace;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border-width: 0.188em;
+    border-style: solid;
+    border-color: #1eaace;
+    -webkit-transition: all ease .3s;
+    -moz-transition: all ease .3s;
+    -ms-transition: all ease .3s;
+    -o-transition: all ease .3s;
+    transition: all ease .3s;
+}
+
+.section-icon-blue .shape-round {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.section-icon-blue .shape-round img {
+    max-height: 4.688em;
+    vertical-align: middle;
+}
+
+.slider-img {
+    width: 100%;
+}
+
+#img-logo {
+    width: 200px;
+    height: 100px;
+}
+
+#recommended-movies {
+    position: relative;
+    width: 100%;
+}

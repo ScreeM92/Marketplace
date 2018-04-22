@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <h1 id="header-movies" class="page-title">Group purchases</h1>
+    </div>
+
+    {{#if groups}}
+        <div id="movies-list-gallery" class="col-xs-12">
+            <div class="row text-primary">
+                {{#each groups}}
+                    <div class="movie col-xs-12 col-sm-6 col-md-4  col-lg-4 text-primary" id="{{id}}">
+                        <div class="movie-wrapper">
+                            <a href="#groups/{{id}}">
+                                <h5 class="title text-center">{{movie.title}}</h5>
+                                <div class="wrapper-movie-img">
+                                    <div class="price">${{remainingPrice}}</div>
+                                    <img class="movie-cover" src="{{movie.imgUrl}}" alt="movie-cover">
+                                </div>
+
+                                <button style="width:100%;" class="btn btn-red">Join</button>
+                            </a>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    {{else}}
+    <div class="no-movies text-center">
+        <h2 style="padding-top: 70px;">No groups</h2>
+        <img class="movie-cover" src="images/unhappy.png" alt="unhappy icon">
+    </div>
+    {{/if}}
+</div>

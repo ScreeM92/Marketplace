@@ -1,0 +1,37 @@
+<h1 class="page-title text-xs-center">Your Cart - Total amount: ${{amount}}</h1>
+<div id="all-cart" class='container'>
+    {{#if movies}}
+        {{#movies}}
+            <div class="cart-item movie col-xs-12 col-sm-6 col-md-3 mb-30">
+                <div id="wrap-cart-movie">
+                    <div id="cart-movie">
+                        <div class="movie-title">
+                            <a href="#movies/{{id}}">
+                                {{title}}
+                            </a>
+                        </div>
+                        <div class="movie-price ">{{quantity}} x ${{price}}</div>
+                    </div>
+                    <div id="cart-img">
+                        <img class="w-100 h-250" src="{{imgUrl}}" alt="movie cover">
+                    </div>
+                </div>
+            </div>   
+        {{/movies}}
+        <form class="form-horizontal col-xs-12 text-center" method="post" action="/#orders">
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-red btn-lg btn-block login-button">Buy</button>
+            </div>
+        </form>
+        <form class="form-horizontal col-xs-12 text-center" method="post" action="/#group-order">
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-red btn-lg btn-block login-button">Group Buy</button>
+            </div>
+        </form>
+    {{else}}
+    <div class="no-movies text-center">
+        <h2>No movies in the cart</h2>
+        <img class="movie-cover" src="images/unhappy.png" alt="unhappy icon">
+    </div>
+    {{/if}}
+</div>

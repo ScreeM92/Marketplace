@@ -1,0 +1,7 @@
+{
+    "css": {
+        "site": [
+            "public/bower_components/bootstrap/dist/css/bootstrap.css"
+        ]
+    }
+}

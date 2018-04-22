@@ -1,0 +1,20 @@
+{
+    "name": "Movie rental",
+    "description": "JavaScript Applications",
+    "main": "index.js",
+    "authors": ["mihail.nikov"],
+    "license": "ISC",
+    "homepage": "",
+    "dependencies": {
+        "jquery": "^3.1.0",
+        "lodash": "4.17.4",
+        "tether": "1.4.0",
+        "handlebars": "^4.0.5",
+        "bootstrap": "4.0.0-alpha.4",
+        "sammy": "~0.7.6",
+        "font-awesome": "fontawesome#^4.6.3",
+        "animate.css": "^3.5.2",
+        "mocha": "^3.1.0",
+        "chai": "^3.5.0"
+    }
+}

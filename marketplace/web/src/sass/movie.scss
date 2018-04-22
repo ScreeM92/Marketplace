@@ -1,0 +1,50 @@
+/* scss for single movie page */
+
+#single-movie-page {
+    padding: 30px;
+}
+
+#single-movie-cover img {
+    width: 100%;
+    height: 600px;
+}
+
+#movie-cover {
+    width: 300px;
+    height: 300px;
+}
+
+#single-movie-info {
+    float: right;
+    color: white;
+}
+
+#single-movie-cart {
+    float: left;
+    color: #fff !important;
+}
+
+#add-to-cart-btn {
+    color: #fff !important;
+    width: 100%;
+}
+
+#single-movie-info span {
+    display: block;
+    text-align: justify;
+}
+
+.single-movie-wrapper {
+    padding: 15px;
+    background: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#single-movie-info * {
+    color: black;
+}
+
+#single-movie-info .buttons i {
+    color: #fff;
+}

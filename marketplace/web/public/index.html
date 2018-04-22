@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <title>CinemaGO</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <!-- Styles -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="bower_components/animate.css/animate.min.css" rel="stylesheet">
+    <link href="styles/style.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-transperant">
+    <div id="main-wrapper" class="container">
+        <header class="container">
+            <div id="header-cart">
+                <div class="row">
+                    <div class="col-xs-12 float-right">
+                        <div id="cart-btn" class="float-right mt-3">
+                            <a class="btn btn-main" href="#cart">
+                                <i class="fa fa-shopping-cart"></i> Cart <span class="total">$0.00</span>
+                            </a>
+                            <div id="dropdown-cart">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-main-wrap">
+                <div class="logo col-xs-3">
+                    <h1 class="display-1">
+                        <a href="/#/">
+                            <img id="img-logo" src="images/logo.png" alt="CinemaGO logo" />
+                        </a>
+                    </h1>
+                </div>
+                <button id="mobile-nav-trigger" class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#main-nav-wrap" aria-controls="exCollapsingNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    &#9776;
+                </button>
+                <nav id="main-nav-wrap" class="container navbar col-xs-9 collapse navbar-toggleable-sm">
+                    <div class="row">
+                        <ul id="main-nav" class="nav nav-pills pull-right">
+                            <li class="nav-item"><a href="#/" class="background-transparent nav-link">Home</a></li>
+                            <li class="nav-item "><a href="#movies/page/1" class="background-transparent nav-link">Movies</a></li>
+                            <li class="nav-item "><a href="#tokens" class="background-transparent nav-link">Buy tokens</a></li>
+                            <li class="nav-item "><a href="#groups" class="background-transparent nav-link">Group purchases</a></li>
+                            <li class="nav-item"><a href="#find" class="background-transparent nav-link">Find us</a></li>
+                            <li style="display:none" id="admin-nav-item" class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <div class="dropdown-menu">
+                                    <a href="#add-movie" class="background-transparent nav-link dropdown-item">Add movie</a>
+                                    <a href="#withdraw" class="background-transparent nav-link dropdown-item">Withdraw</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Sammy App-->
+        <div class="background-transparent container" id="sammy-app">
+        </div>
+        <!-- /sammy app -->
+
+    </div>
+    <script src='./node_modules/systemjs/dist/system.js'></script>
+    <script src="./scripts/config/systemjs-config.js"></script>
+    <script>
+        System.import('app');
+    </script>
+
+    <!-- Google API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkFHH98JXm3hP7xqrJgiINu8fYnpG_VW8&callback=initMap">
+    </script>
+    <!-- /Google API -->
+
+</body>
+
+</html>

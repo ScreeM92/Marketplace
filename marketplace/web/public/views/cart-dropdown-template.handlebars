@@ -1,0 +1,25 @@
+<div id='container'>
+     <label>Your orders:</label>
+     {{#movie}}
+         <div class="cart-item">
+             <div class="left">
+                 <img class="w-50 h-60" src="{{imgUrl}}" alt="movie cover">
+             </div>
+             <div class="right">
+                 <div class="title">
+                    <a href="#movies/{{id}}">
+                        {{title}}
+                    </a>
+                    <a>
+                        <i style="color: #ce3b22; cursor: pointer;" id="delete-movie" class="fa fa-trash fa-fw" data-id="{{id}}"></i>
+                    </a>
+                 </div>
+                 <div class="quantity">{{quantity}} x ${{price}}</div>
+             </div>
+         </div>
+     {{/movie}}
+     <div class="totals">
+         <span><span class="label">Total amount:</span> ${{amount}}</span>
+         <a id="cart-buy-all" href="/#cart" class="btn btn-red">Show</a>
+     </div>
+</div>

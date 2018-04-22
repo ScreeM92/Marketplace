@@ -1,0 +1,39 @@
+<div id="homepage-carousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+        <div class="carousel-item active">
+            <img class="slider-img" src="../images/slider/cinema-background.jpg" alt="First slide">.
+            <div id="movie-caption-image" class="carousel-caption">
+                <img class="animated zoomIn home-image" src="{{primary.imgUrl}}" />
+            </div>
+            <div id="movie-caption-text" class="carousel-caption">
+                <h2 class="animated fadeInRight home-title">{{primary.title}}</h2>
+                <p class="animated fadeInRight home-description">{{trimString primary.description}}</p>
+            </div>
+            <div id="movie-view-btn" class="carousel-caption animated fadeInRight">
+                <a class="btn btn-transparent" href="#movies/{{primary.id}}">Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="recommended-movies">
+    <h1 id="header-movies" class="page-title">Recommended Movies</h1>
+    <div class="container">
+        <div class="row text-primary mb-30">
+            {{#each recommended_movies}}
+                <div class="movie col-xs-12 col-sm-6 col-md-3 text-primary" id="{{id}}">
+                    <div class="movie-wrapper">
+                        <a href="#movies/{{id}}">
+                            <h5 class="title text-center">{{title}}</h5>
+                            <div class="wrapper-movie-img">
+                                <div class="price">${{price}}</div>
+                                <img class="movie-cover" src="{{imgUrl}}" alt="movie-cover">
+                            </div>
+                        </a>
+                        <button class="btn btn-red" id="add-to-cart-btn" type="submit" movie-target="{{id}}">Add to cart</button>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+

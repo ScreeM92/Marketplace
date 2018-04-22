@@ -1,0 +1,43 @@
+<h1 class="page-title">{{title}}</h1>
+<div class="container" id="single-movie-page">
+    <div class="single-movie-wrapper">
+        <div class="row text-primary">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5" id="single-movie-cover">
+                <img src="{{imgUrl}}" alt="movie cover">
+            </div>
+            <div class=" col-xs-0 col-sm-0 col-md-0 col-lg-7 text-primary" id="single-movie-info">
+                <p>
+                    <span><b>Category: </b>{{category}}</span>
+                    <span id="moviePrice"><b>Price: </b>{{price}}$</span>
+                    <span id="movieQuantity"><b>Quantity: </b>{{quantity}}</span>
+                </p>
+                <p>
+                    <span><b>Description: </b>{{description}}</span>
+                </p>
+
+                <div class="buttons text-center">
+                    <div id="single-movie-info">
+                        <button class="btn btn-success" id="like-btn" type="submit">
+                            <i class="fa fa-thumbs-up fa-fw"></i>
+                            Like <i id='likes'>( {{likes}} )</i>
+                        </button>
+                    </div>
+                    <div id="single-movie-cart">
+                        <button class="btn btn-red" id="add-to-cart-btn" movie-target="{{id}}" type="submit">
+                            <i class="fa fa-cart-plus fa-fw"></i>
+                            Add to cart
+                        </button>
+                    </div>
+                    {{#if hasAdmin }}
+                        <div id="single-movie-edit">
+                            <button class="btn btn-warning" id="edit-movie-btn" type="submit" data-id="{{id}}">
+                                <i id="edit-movie-icon" class="fa fa-edit fa-fw" data-id="{{id}}"></i>
+                                Edit
+                            </button>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
