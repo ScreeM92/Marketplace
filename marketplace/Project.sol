@@ -703,9 +703,7 @@ contract Marketplace is Ownable, TokenERC20 {
             group.remainingPrice -= _tokens;   
 
             transferTo(owner, _tokens); 
-        } 
-        
-        transferTo(owner, _tokens);
+        }
     }
     
     /**
