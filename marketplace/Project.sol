@@ -38,81 +38,119 @@ contract Ownable {
 }
 
 /**
+ * @title TokenERC20Interface
+ * @dev The TokenERC20Interface Interface
+ */
+contract TokenERC20Interface {
+    /* This is a slight change to the ERC20 base standard.
+    function totalSupply() constant returns (uint256 supply);
+    is replaced with:
+    uint256 public totalSupply;
+    This automatically creates a getter function for the totalSupply.
+    This is moved to the base contract since public getter functions are not
+    currently recognised as an implementation of the matching abstract
+    function by the compiler.
+    */
+    /// total amount of tokens
+    uint256 public totalSupply;
+
+    /// @param _owner The address from which the balance will be retrieved
+    /// @return The balance
+    function balanceOf(address _owner) public view returns (uint256 balance);
+
+    /// @notice send `_value` token to `_to` from `msg.sender`
+    /// @param _to The address of the recipient
+    /// @param _value The amount of token to be transferred
+    /// @return Whether the transfer was successful or not
+    function transfer(address _to, uint256 _value) public returns (bool success);
+
+    /// @notice send `_value` token to `_to` from `_from` on the condition it is approved by `_from`
+    /// @param _from The address of the sender
+    /// @param _to The address of the recipient
+    /// @param _value The amount of token to be transferred
+    /// @return Whether the transfer was successful or not
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+
+    /// @notice `msg.sender` approves `_spender` to spend `_value` tokens
+    /// @param _spender The address of the account able to transfer the tokens
+    /// @param _value The amount of tokens to be approved for transfer
+    /// @return Whether the approval was successful or not
+    function approve(address _spender, uint256 _value) public returns (bool success);
+
+    /// @param _owner The address of the account owning tokens
+    /// @param _spender The address of the account able to transfer the tokens
+    /// @return Amount of remaining tokens allowed to spent
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining);
+
+    // solhint-disable-next-line no-simple-event-func-name
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+}
+
+/**
  * @title TokenERC20
  * @dev The TokenERC20 Abstract class
  */
-contract TokenERC20 {
-    // Public variables of the token
-    string public name;
-    string public symbol;
-    uint8 public decimals = 18;
-    // 18 decimals is the strongly suggested default, avoid changing it
-    uint256 public totalSupply;
+contract TokenERC20 is TokenERC20Interface {
 
-    // This creates an array with all balances
-    mapping (address => uint256) public balanceOf;
+    uint256 constant private MAX_UINT256 = 2**256 - 1;
+    mapping (address => uint256) public balances;
+    mapping (address => mapping (address => uint256)) public allowed;
+    /*
+    NOTE:
+    The following variables are OPTIONAL vanities. One does not have to include them.
+    They allow one to customise the token contract & in no way influences the core functionality.
+    Some wallets/interfaces might not even bother to look at this information.
+    */
+    string public name;                   //name
+    uint8 public decimals;                //How many decimals to show.
+    string public symbol;                 //An identifier
 
-    // This generates a public event on the blockchain that will notify clients
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event TransferTo(address indexed to, uint256 value);
-
-    /**
-     * Constrctor function
-     *
-     * Initializes contract with initial supply tokens to the creator of the contract
-     */
     function TokenERC20(
-        uint256 initialSupply,
-        string tokenName,
-        string tokenSymbol
+        uint256 _initialAmount,
+        string _tokenName,
+        uint8 _decimalUnits,
+        string _tokenSymbol
     ) public {
-        totalSupply = initialSupply * 10 ** uint256(decimals);  // Update total supply with the decimal amount
-        balanceOf[msg.sender] = totalSupply;                // Give the creator all initial tokens
-        name = tokenName;                                   // Set the name for display purposes
-        symbol = tokenSymbol;                               // Set the symbol for display purposes
+        balances[msg.sender] = _initialAmount;               // Give the creator all initial tokens
+        totalSupply = _initialAmount;                        // Update total supply
+        name = _tokenName;                                   // Set the name for display purposes
+        decimals = _decimalUnits;                            // Amount of decimals for display purposes
+        symbol = _tokenSymbol;                               // Set the symbol for display purposes
     }
 
-    /**
-     * Transfer tokens
-     *
-     * Send `_value` tokens to `_to` from your account
-     *
-     * @param _to The address of the recipient
-     * @param _value the amount to send
-     */
-    function transfer(address _from, address _to, uint _value) public {
-        // Prevent transfer to 0x0 address. Use burn() instead
-        require(_to != 0x0);
-        // Check if the sender has enough
-        require(balanceOf[_from] >= _value);
-        // Check for overflows
-        require(balanceOf[_to] + _value > balanceOf[_to]);
-        // Save this for an assertion in the future
-        uint previousBalances = balanceOf[_from] + balanceOf[_to];
-        // Subtract from the sender
-        balanceOf[_from] -= _value;
-        // Add the same to the recipient
-        balanceOf[_to] += _value;
-        emit Transfer(_from, _to, _value);
-        // Asserts are used to use static analysis to find bugs in your code. They should never fail
-        assert(balanceOf[_from] + balanceOf[_to] == previousBalances);
+    function transfer(address _to, uint256 _value) public returns (bool success) {
+        require(balances[msg.sender] >= _value);
+        balances[msg.sender] -= _value;
+        balances[_to] += _value;
+        emit Transfer(msg.sender, _to, _value); //solhint-disable-line indent, no-unused-vars
+        return true;
     }
-    
-    /**
-     * Transfer tokens to address
 
-     * @param _to The address of the recipient
-     * @param _value the amount to send
-     */
-    function transferTo(address _to, uint _value) public {
-        // Prevent transfer to 0x0 address. Use burn() instead
-        require(_to != 0x0);
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+        uint256 allowance = allowed[_from][msg.sender];
+        require(balances[_from] >= _value && allowance >= _value);
+        balances[_to] += _value;
+        balances[_from] -= _value;
+        if (allowance < MAX_UINT256) {
+            allowed[_from][msg.sender] -= _value;
+        }
+        emit Transfer(_from, _to, _value); //solhint-disable-line indent, no-unused-vars
+        return true;
+    }
 
-        // Check for overflows
-        require(balanceOf[_to] + _value > balanceOf[_to]);
+    function balanceOf(address _owner) public view returns (uint256 balance) {
+        return balances[_owner];
+    }
 
-        balanceOf[_to] += _value;
-        emit TransferTo(_to, _value);
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        allowed[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value); //solhint-disable-line indent, no-unused-vars
+        return true;
+    }
+
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
+        return allowed[_owner][_spender];
     }
 }
 
@@ -382,6 +420,7 @@ contract Marketplace is Ownable, TokenERC20 {
     bytes32[] private groupIds;
     uint256 public tokenPrice = 1000;
     uint256 initialSupply = 12000000;
+    uint8 tokenDecimals = 16;
     string tokenName = "LimeChain";
     string tokenSymbol = "LMN";
     
@@ -443,7 +482,7 @@ contract Marketplace is Ownable, TokenERC20 {
     * @notice The constructor of the Marketplace contract
     * @dev Initializes contract with initial supply tokens to the creator of the contract
     */
-    function Marketplace() TokenERC20(initialSupply, tokenName, tokenSymbol) public {}
+    function Marketplace() TokenERC20(initialSupply, tokenName, tokenDecimals, tokenSymbol) public {}
     
     /**
     * @notice  Buy tokens from contract by sending ether
@@ -453,7 +492,7 @@ contract Marketplace is Ownable, TokenERC20 {
         require((msg.value % 1 ether) == 0); //accept only round ETH
         
         uint256 tokens = SafeMath.mul((msg.value / 1 ether), tokenPrice) ; // calculates the amount
-        transfer(owner, msg.sender, tokens); // makes the transfers
+        transfer(owner, tokens); // makes the transfers
     }
     
     /**
@@ -609,9 +648,8 @@ contract Marketplace is Ownable, TokenERC20 {
         require(_quantity <= movie.quantity);
         uint256 newPrice = dynamicPrice(movie.price, movie.quantity);
         uint256 orderPrice = SafeMath.mul(_quantity, newPrice);
-        require(orderPrice <= balanceOf[msg.sender]);
         
-        transfer(msg.sender, owner, orderPrice); // makes the transfers
+        transfer(owner, orderPrice); // makes the transfers
         movie.buy(_quantity);
     }
     
@@ -660,7 +698,7 @@ contract Marketplace is Ownable, TokenERC20 {
     
     /**
     * @dev This function is made for group buying a movie if the group doesn't exist, is finished 
-    *       or the tokens sent is less trown an error
+    *       or the tokens sent are less trown an error
     * 
     * @param _groupId The id of the group
     * @param _tokens The tokens sent
@@ -677,32 +715,26 @@ contract Marketplace is Ownable, TokenERC20 {
 
         // Check if tokens sent are less than zero
         require(_tokens > 0);
-        // Check if the sender has enough
-        require(balanceOf[msg.sender] >= _tokens);
         
         if(group.userTokens[msg.sender] == 0) {
             group.users.push(msg.sender);
         }
         
         if(_tokens >= group.remainingPrice) {
-            // Subtract from the sender
-            balanceOf[msg.sender] -= group.remainingPrice;
             group.userTokens[msg.sender] += group.remainingPrice;
-
             movies[group.movieId].groupBuy(group);
 
-            transferTo(owner, group.remainingPrice);
             group.remainingPrice = 0;
             group.finished = true;
+
+            transfer(owner, group.remainingPrice);
         }
         else {
             group.userTokens[msg.sender] += _tokens;
-            // Subtract from the sender
-            balanceOf[msg.sender] -= _tokens;
             // Subtract from the remaining tokens
             group.remainingPrice -= _tokens;   
 
-            transferTo(owner, _tokens); 
+            transfer(owner, _tokens); 
         }
     }
     
