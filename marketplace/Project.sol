@@ -492,7 +492,12 @@ contract Marketplace is Ownable, TokenERC20 {
         require((msg.value % 1 ether) == 0); //accept only round ETH
         
         uint256 tokens = SafeMath.mul((msg.value / 1 ether), tokenPrice) ; // calculates the amount
-        transfer(owner, tokens); // makes the transfers
+        
+        require (balances[owner] >= tokens);               // Check if the sender has enough
+        require (balances[msg.sender] + tokens >= balances[msg.sender]); // Check for overflows
+        balances[owner] -= tokens;                         // Subtract from the sender
+        balances[msg.sender] += tokens;                           // Add the same to the recipient
+        emit Transfer(owner, msg.sender, tokens);
     }
     
     /**
@@ -705,7 +710,8 @@ contract Marketplace is Ownable, TokenERC20 {
     */
     function groupBuyMovie(
         bytes32 _groupId,
-        uint256 _tokens
+        uint256 _tokens,
+        address tokenOwner
     )
         public
         IsGroupAvailable(_groupId)
@@ -713,28 +719,27 @@ contract Marketplace is Ownable, TokenERC20 {
     {
         MoviesLib.MovieGroupBuy storage group = groups[_groupId];
 
-        // Check if tokens sent are less than zero
+        // Check if tokens sent are less or equal than zero
         require(_tokens > 0);
         
-        if(group.userTokens[msg.sender] == 0) {
-            group.users.push(msg.sender);
-        }
-        
         if(_tokens >= group.remainingPrice) {
-            group.userTokens[msg.sender] += group.remainingPrice;
             movies[group.movieId].groupBuy(group);
-
-            group.remainingPrice = 0;
             group.finished = true;
-
-            transfer(owner, group.remainingPrice);
+            _tokens = group.remainingPrice;
+            group.remainingPrice = 0;
         }
         else {
-            group.userTokens[msg.sender] += _tokens;
             // Subtract from the remaining tokens
             group.remainingPrice -= _tokens;   
-
-            transfer(owner, _tokens); 
+        }
+        if(tokenOwner != address(0)) {
+            group.users.push(tokenOwner);
+            group.userTokens[tokenOwner] += _tokens;
+            transferFrom(tokenOwner, owner, _tokens);
+        } else {
+            group.users.push(msg.sender);
+            group.userTokens[msg.sender] += _tokens;
+            transfer(owner, _tokens);
         }
     }
     
