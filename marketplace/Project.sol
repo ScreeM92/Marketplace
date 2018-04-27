@@ -154,6 +154,38 @@ contract TokenERC20 is TokenERC20Interface {
     }
 }
 
+contract TokenLMN is Ownable, TokenERC20 {
+    using SafeMath for uint;
+    
+    uint256 public tokenPrice = 1000;
+    uint256 initialSupply = 12000000;
+    uint8 tokenDecimals = 16;
+    string tokenName = "LimeChain";
+    string tokenSymbol = "LMN";
+    
+    /**
+    * @notice The constructor of the TokenLMN contract
+    * @dev Initializes contract with initial supply tokens to the creator of the contract
+    */
+    function TokenLMN() TokenERC20(initialSupply, tokenName, tokenDecimals, tokenSymbol) public {}
+    
+    /**
+    * @notice  Buy tokens from contract by sending ether
+    */
+    function buyTokens() payable public {
+        require(msg.value / 1 ether > 0); //at least 1 ether
+        require((msg.value % 1 ether) == 0); //accept only round ETH
+        
+        uint256 tokens = SafeMath.mul((msg.value / 1 ether), tokenPrice) ; // calculates the amount
+        
+        require (balances[owner] >= tokens);               // Check if the sender has enough
+        require (balances[msg.sender] + tokens >= balances[msg.sender]); // Check for overflows
+        balances[owner] -= tokens;                         // Subtract from the sender
+        balances[msg.sender] += tokens;                           // Add the same to the recipient
+        emit Transfer(owner, msg.sender, tokens);
+    }
+}
+
 /**
  * @title SafeMath
  * @dev Math operations with safety checks that throw an error
@@ -410,7 +442,7 @@ library MoviesLib {
  * @title Marketplace
  * @dev The Marketplace contract for add, edit, buy and like operations that throw an error
  */
-contract Marketplace is Ownable, TokenERC20 {
+contract Marketplace is Ownable {
     using SafeMath for uint;
     using MoviesLib for MoviesLib.Movie;
     mapping(bytes32 => MoviesLib.Movie) movies;
@@ -418,11 +450,7 @@ contract Marketplace is Ownable, TokenERC20 {
     mapping(address => bytes32[]) public userGroups;
     bytes32[] private movieIds;
     bytes32[] private groupIds;
-    uint256 public tokenPrice = 1000;
-    uint256 initialSupply = 12000000;
-    uint8 tokenDecimals = 16;
-    string tokenName = "LimeChain";
-    string tokenSymbol = "LMN";
+    TokenLMN tokenLMN;
     
     event Withdraw(address indexed to, uint amountWithdrawn);
     event CreateGroup(address indexed creator, bytes32 movieId, uint256 quantity, uint256 price);
@@ -480,24 +508,9 @@ contract Marketplace is Ownable, TokenERC20 {
     
     /**
     * @notice The constructor of the Marketplace contract
-    * @dev Initializes contract with initial supply tokens to the creator of the contract
     */
-    function Marketplace() TokenERC20(initialSupply, tokenName, tokenDecimals, tokenSymbol) public {}
-    
-    /**
-    * @notice  Buy tokens from contract by sending ether
-    */
-    function buyTokens() payable public {
-        require(msg.value / 1 ether > 0); //at least 1 ether
-        require((msg.value % 1 ether) == 0); //accept only round ETH
-        
-        uint256 tokens = SafeMath.mul((msg.value / 1 ether), tokenPrice) ; // calculates the amount
-        
-        require (balances[owner] >= tokens);               // Check if the sender has enough
-        require (balances[msg.sender] + tokens >= balances[msg.sender]); // Check for overflows
-        balances[owner] -= tokens;                         // Subtract from the sender
-        balances[msg.sender] += tokens;                           // Add the same to the recipient
-        emit Transfer(owner, msg.sender, tokens);
+    function Marketplace(address _tokenAddress) public {
+        tokenLMN = TokenLMN(_tokenAddress);
     }
     
     /**
@@ -654,7 +667,7 @@ contract Marketplace is Ownable, TokenERC20 {
         uint256 newPrice = dynamicPrice(movie.price, movie.quantity);
         uint256 orderPrice = SafeMath.mul(_quantity, newPrice);
         
-        transfer(owner, orderPrice); // makes the transfers
+        require(tokenLMN.transferFrom(msg.sender, owner, orderPrice)); // makes the transfers
         movie.buy(_quantity);
     }
     
@@ -710,8 +723,7 @@ contract Marketplace is Ownable, TokenERC20 {
     */
     function groupBuyMovie(
         bytes32 _groupId,
-        uint256 _tokens,
-        address tokenOwner
+        uint256 _tokens
     )
         public
         IsGroupAvailable(_groupId)
@@ -721,6 +733,10 @@ contract Marketplace is Ownable, TokenERC20 {
 
         // Check if tokens sent are less or equal than zero
         require(_tokens > 0);
+        //Check if user was sent tokens
+        if(group.userTokens[msg.sender] == 0) {
+            group.users.push(msg.sender);
+        }
         
         if(_tokens >= group.remainingPrice) {
             movies[group.movieId].groupBuy(group);
@@ -732,15 +748,9 @@ contract Marketplace is Ownable, TokenERC20 {
             // Subtract from the remaining tokens
             group.remainingPrice -= _tokens;   
         }
-        if(tokenOwner != address(0)) {
-            group.users.push(tokenOwner);
-            group.userTokens[tokenOwner] += _tokens;
-            transferFrom(tokenOwner, owner, _tokens);
-        } else {
-            group.users.push(msg.sender);
-            group.userTokens[msg.sender] += _tokens;
-            transfer(owner, _tokens);
-        }
+
+        group.userTokens[msg.sender] += _tokens;
+        require(tokenLMN.transferFrom(msg.sender, owner, _tokens));
     }
     
     /**
